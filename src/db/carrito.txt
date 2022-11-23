@@ -1,0 +1,22 @@
+<<<<<<< HEAD:src/db/carrito.txt
+[]
+=======
+[
+  {
+    "timestamp": "1/11/2022 22:01:49",
+    "productos": [
+      {
+        "timestamp": "1/11/2022 21:58:10",
+        "name": "TV",
+        "description": "Television LED",
+        "code": "TV159",
+        "url": "www.compumundo.com",
+        "price": 80000,
+        "stock": 10,
+        "id": 1
+      }
+    ],
+    "id": 1
+  }
+]
+>>>>>>> ee724b43402da9cc51b2c10344175608d0be5294:SchneiterDavid-Entregable-7/src/db/carrito.txt
