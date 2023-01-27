@@ -71,11 +71,14 @@ export const deleteProduct = async (req: Request, res: Response) => {
 export const confirmProucts = async (req: Request, res: Response) => {
   let cart: ICart = await CartDao.getById(req.params.cartId)
 
+  const productsList = cart.productos.map((a) => { return `<h1>Descripcion: ${a.description}, Precio: $${a.price}</h1>` });
+  const productsTotal = cart.productos.map((a) => { return a.price }).reduce((a, b) => { return a + b });
+
   const email = {
     from: 'Servidor eCommerce',
     to: process.env.MAIL,
     subject: `Nuevo pedido de: ${req.user?.name} email:  ${req.user?.email}`,
-    html: `<h1 style="color: blue"><span>Lista de productos: </span> ${cart.productos}</h1>`
+    html: `<h1 style="color: blue">Lista de productos: </h1> ${productsList} <br> <h1>Total: $${productsTotal}</h1>`
   };
   try {
     client.messages.create({
@@ -86,9 +89,9 @@ export const confirmProucts = async (req: Request, res: Response) => {
       .then(message => console.log(message.sid));
     
      client.messages.create({
-      body: `Lista de productos en su carrito: ${cart.productos}`,
+      body: `Lista de productos en su carrito: \n ${cart.productos.map((a) => { return `Descripcion: ${a.description}, Precio: $${a.price}\n`})} Total: $${productsTotal}`,
       from: process.env.WPP_TWILIO,
-      to: `whatsapp:+549${JSON.stringify(req.user?.cellphone)}` || 'whatsapp:+5493484537814'
+      to: `whatsapp:+549${JSON.stringify(req.user?.cellphone)}`
      })
     .then(message => console.log(message.sid));
 
@@ -98,5 +101,5 @@ export const confirmProucts = async (req: Request, res: Response) => {
   } catch (error) {
     logger.error(error)
   }
-  res.status(200).json(`Carrito id: ${req.params.cartId}, de ${req.user?.name}, confirmado. Porductos: ${cart.productos}`)
+  res.status(200).json(`Carrito id: ${req.params.cartId}, de ${req.user?.name}, confirmado. Productos: ${cart.productos}`)
 }

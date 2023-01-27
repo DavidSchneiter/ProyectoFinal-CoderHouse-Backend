@@ -1,4 +1,4 @@
 node_modules
 /dist
 /.env
-/database/adminFirebase.json
+/src/database/adminFirebase.json
