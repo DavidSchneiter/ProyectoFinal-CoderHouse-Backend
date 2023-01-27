@@ -14,6 +14,6 @@ routerCart.delete("/:id", cartController.deleteById)
 
 routerCart.post("/:cartId/productsId", cartController.addProduct);
 
-routerCart.get("/confirmar/:cartId", cartController.confirmProucts);
+routerCart.post("/confirmar/:cartId", cartController.confirmProucts);
 
 routerCart.delete("/:cartId/productsId/:id_prod", cartController.deleteProduct)
