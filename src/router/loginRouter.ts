@@ -37,8 +37,8 @@ routerLogin.post("/register", [
   }).isString(),
   body("name", "El nombre es obligatorio").notEmpty().isString(),
   body("address", "El stock es obligatorio").notEmpty().isString(),
-  body("edad", "El precio es obligatorio").isNumeric().notEmpty(),
-  body("celular", "El stock es obligatorio").isNumeric().notEmpty(),
+  body("age", "La edad es obligatoria").isNumeric().notEmpty(),
+  body("cellphone", "El numero celular es obligatorio").isNumeric().notEmpty(),
   body("avatar", "La url es obligatoria").isLength({
       min: 10,
     }).isString(),

@@ -1,4 +1,5 @@
 import { createTransport } from 'nodemailer';
+import 'dotenv/config'
 
 export const transporter = createTransport({
     host: 'smtp.gmail.com',
@@ -6,6 +7,6 @@ export const transporter = createTransport({
     secure: false,
     auth: {
         user: process.env.MAIL,
-        pass: 'nfkfcczppihkhtfl'
+        pass: process.env.MAIL_PASSWORD
     }
 });

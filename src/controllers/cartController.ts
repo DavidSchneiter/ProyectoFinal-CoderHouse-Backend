@@ -1,8 +1,7 @@
 import { Request, Response} from 'express';
 import { ICart, IProduct } from "../interfaces";
-import { getTime, logger } from "../utils";
+import { getTime, logger, transporter } from "../utils";
 import { ProductDao, CartDao } from "../Daos";
-import { transporter } from '../utils';
 import twilio from 'twilio';
 import 'dotenv/config'
 
@@ -73,23 +72,23 @@ export const confirmProucts = async (req: Request, res: Response) => {
   let cart: ICart = await CartDao.getById(req.params.cartId)
 
   const email = {
- from: 'Servidor eCommerce',
- to: process.env.MAIL,
- subject: `Nuevo pedido de: ${JSON.stringify(req.user?.name)} email:  ${req.user?.email}}`,
- html: `<h1 style="color: blue"><span>Lista de productos: </span> ${cart.productos}</h1>`
+    from: 'Servidor eCommerce',
+    to: process.env.MAIL,
+    subject: `Nuevo pedido de: ${req.user?.name} email:  ${req.user?.email}`,
+    html: `<h1 style="color: blue"><span>Lista de productos: </span> ${cart.productos}</h1>`
   };
   try {
     client.messages.create({
-      body: `Lista de productos en su carrito: ${cart.productos}`,
+      body: `Nuevo pedido de: ${req.user?.name}, email:  ${req.user?.email}`,
       from: process.env.WPP_TWILIO,
-      to: process.env.WPP_ADMINISTRADOR || 'whatsapp:+543484537814'
+      to: process.env.WPP_ADMINISTRADOR || 'whatsapp:+5493484537814'
     })
       .then(message => console.log(message.sid));
     
      client.messages.create({
       body: `Lista de productos en su carrito: ${cart.productos}`,
       from: process.env.WPP_TWILIO,
-      to: JSON.stringify(req.user?.cellphone) || 'whatsapp:+543484537814'
+      to: `whatsapp:+549${JSON.stringify(req.user?.cellphone)}` || 'whatsapp:+5493484537814'
      })
     .then(message => console.log(message.sid));
 
@@ -97,7 +96,7 @@ export const confirmProucts = async (req: Request, res: Response) => {
     logger.info(info);
     
   } catch (error) {
-    console.log(error)
+    logger.error(error)
   }
   res.status(200).json(`Carrito id: ${req.params.cartId}, de ${req.user?.name}, confirmado. Porductos: ${cart.productos}`)
 }

@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { User } from "../models";
-import { logger } from "../utils";
-import { transporter } from "../utils";
-
+import { logger, transporter } from "../utils";
+import 'dotenv/config'
 
 export const register = async(req: Request, res: Response) => {
   if (!req.body.email || !req.body.password) {
