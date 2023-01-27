@@ -1,5 +1,6 @@
 import { initializeApp, cert, ServiceAccount } from 'firebase-admin/app';
 import {getFirestore} from 'firebase-admin/firestore'
+import { logger } from '../utils';
 import serviceAccount from './adminFirebase.json';
 
 initializeApp({
@@ -9,10 +10,10 @@ initializeApp({
 export const dbConnectionFirebase = async() => {
  try {
    const db = getFirestore()
-   console.log('Firestore connection')
+   logger.info('Firestore connection')
    return db
  } catch (error) {
-   console.log(error)
+   logger.error(error)
    throw new Error("Firestore connection error: " + error)
  }
 }

@@ -31,3 +31,14 @@ export interface ICart {
   timestamp: string;
   productos: Array<IProduct>;
 }
+
+export interface IUser {
+  
+  email: string;
+  password: string;
+  name: string;
+  address: string;
+  age: number; 
+  cellphone: number;
+  avatar: string;
+}

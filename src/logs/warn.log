@@ -1,0 +1,5 @@
+{"code":"EDNS","command":"CONN","errno":-3008,"hostname":"gmail","level":"error","syscall":"getaddrinfo"}
+{"code":"ESOCKET","command":"CONN","function":"ssl3_get_record","level":"error","library":"SSL routines","reason":"wrong version number"}
+{"code":"ECONNECTION","command":"CONN","function":"ssl3_get_record","level":"error","library":"SSL routines","reason":"wrong version number"}
+{"code":"EAUTH","command":"API","level":"error"}
+{"code":"EAUTH","command":"API","level":"error"}

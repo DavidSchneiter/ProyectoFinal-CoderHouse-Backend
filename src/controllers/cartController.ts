@@ -1,8 +1,12 @@
 import { Request, Response} from 'express';
 import { ICart, IProduct } from "../interfaces";
-import { getTime } from "../utils";
+import { getTime, logger } from "../utils";
 import { ProductDao, CartDao } from "../Daos";
+import { transporter } from '../utils';
+import twilio from 'twilio';
+import 'dotenv/config'
 
+const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN)
 
 export const getAll = async (req: Request, res:Response) => {
   res.status(200).json(await CartDao.getAll());
@@ -63,4 +67,37 @@ export const deleteProduct = async (req: Request, res: Response) => {
   // await CartDao.save(cart);
   // console.log(newCart)
   res.status(200).json(`Producto con id: ${req.params.id_prod} eliminado del carrito con id: ${req.params.cartId}`)
+}
+
+export const confirmProucts = async (req: Request, res: Response) => {
+  let cart: ICart = await CartDao.getById(req.params.cartId)
+
+  const email = {
+ from: 'Servidor eCommerce',
+ to: process.env.MAIL,
+ subject: `Nuevo pedido de: ${JSON.stringify(req.user?.name)} email:  ${req.user?.email}}`,
+ html: `<h1 style="color: blue"><span>Lista de productos: </span> ${cart.productos}</h1>`
+  };
+  try {
+    client.messages.create({
+      body: `Lista de productos en su carrito: ${cart.productos}`,
+      from: process.env.WPP_TWILIO,
+      to: process.env.WPP_ADMINISTRADOR || 'whatsapp:+543484537814'
+    })
+      .then(message => console.log(message.sid));
+    
+     client.messages.create({
+      body: `Lista de productos en su carrito: ${cart.productos}`,
+      from: process.env.WPP_TWILIO,
+      to: JSON.stringify(req.user?.cellphone) || 'whatsapp:+543484537814'
+     })
+    .then(message => console.log(message.sid));
+
+    const info = await transporter.sendMail(email);
+    logger.info(info);
+    
+  } catch (error) {
+    console.log(error)
+  }
+  res.status(200).json(`Carrito id: ${req.params.cartId}, de ${req.user?.name}, confirmado. Porductos: ${cart.productos}`)
 }

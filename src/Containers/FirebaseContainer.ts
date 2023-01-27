@@ -1,7 +1,7 @@
 import admin from 'firebase-admin'
 import { dbConnectionFirebase } from '../database/configFirebase';
 
-dbConnectionFirebase()
+// dbConnectionFirebase()
 export class FirebaseContainer {
     collections: string;
     query: admin.firestore.DocumentData

@@ -1,0 +1,11 @@
+{{#if username }}
+<div class="d-flex justify-content-between p-3" style="background-color: #28bd1a;">
+
+    <h1 class="">Bienvenido {{username.name}} </h1>
+
+    <button class="btn btn-warning float-right mt-2" onclick="location.href='/api/user/logout'">
+        Desloguear
+    </button>
+</div>
+<img src={{username.avatar}} alt="">
+{{/if}}

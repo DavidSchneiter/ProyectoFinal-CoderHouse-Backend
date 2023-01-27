@@ -1,0 +1,15 @@
+<h2 class="text-primary">Ingreso</h2>
+<form action="/api/registro/login" method="post">
+    <div class="mb-3">
+        <label class="form-label fw-bold" for="title">Email</label>
+        <input class="form-control" type="text" name="email">
+        <label class="form-label fw-bold" for="title">Contraseña</label>
+        <input class="form-control" type="password" name="password">
+    </div>
+    <div class="w-100 d-flex justify-content-around">
+        <div class="">
+            <input class="btn btn-success" type="submit" value="Enviar">
+            <a class="btn btn-primary" href="/api/registro/register">Registro</a>
+        </div>
+    </div>
+</form>
