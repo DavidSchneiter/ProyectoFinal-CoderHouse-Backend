@@ -1,5 +1,5 @@
 import admin from 'firebase-admin'
-import { dbConnectionFirebase } from '../database/configFirebase';
+import  dbConnectionFirebase  from '../database/configFirebase';
 
 // dbConnectionFirebase()
 export class FirebaseContainer {
