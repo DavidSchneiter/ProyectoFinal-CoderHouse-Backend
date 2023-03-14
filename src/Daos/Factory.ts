@@ -1,10 +1,9 @@
 import { CartContenedor, Contenedor } from "../Containers/ClassArchivo"; 
 import {CartFB, CartMongo} from './Carts'
 import { ProductMongo, ProductFB } from './Products'
-import dotenv from 'dotenv';
-dotenv.config()
+import config from '../utils/config';
 
-const DATABASE = process.env.DATABASE || 'mongo'
+const DATABASE = config.DATABASE || 'mongo'
 
 const getSelectedDatabase = ():any => {
     switch (DATABASE) {

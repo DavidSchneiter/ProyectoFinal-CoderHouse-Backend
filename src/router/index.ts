@@ -1,3 +1,4 @@
-export {routerProducts} from "./productsRouter";
+export { routerProducts } from "./productsRouter";
 export { routerCart } from "./cartRouter";
-export { routerLogin } from './loginRouter'
+export { routerAuth } from './authRouter'
+export { routerUser } from './userRouter'

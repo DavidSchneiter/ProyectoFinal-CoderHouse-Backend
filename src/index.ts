@@ -1,5 +1,4 @@
 import express, { Express } from 'express';
-import dotenv from 'dotenv';
 import {engine} from 'express-handlebars'
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
@@ -7,21 +6,25 @@ import passport from 'passport';
 import Mongoose from 'mongoose';
 import { cpus } from 'os'
 import cluster from 'cluster'
+import swaggerUi from "swagger-ui-express";
 
-import { routerCart, routerLogin, routerProducts } from './router'
+import { routerCart, routerProducts, routerUser, routerAuth} from './router'
 import { dbConnection } from './database/configMongo';
 import { logger } from './utils';
-import { routerUser } from './router/userRouter';
+import jsonSwagger from './docs/swaggerConfig.json'
+import config from './utils/config';
+import { Authorized } from './middlewares/authorized';
 
 Mongoose.set("strictQuery", true);
 const advancedOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
-dotenv.config();
+
 const app: Express = express();
 
-const PORT = process.env.PORT || 8080;
+const PORT = config.PORT || 8080;
+console.log(PORT)
 
 
 
@@ -30,12 +33,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     store: MongoStore.create({
-      mongoUrl: process.env.DB_CNN,
+      mongoUrl: config.DB_CNN,
       ttl: 10,
       collectionName: "session",
       autoRemove: "native",
     }),
-    secret: 'OXIDO.RISA.PASTEL' || process.env.SECRET_KEY,
+    name: "cookie.id",
+    secret: 'OXIDO.RISA.PASTEL' || config.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -58,12 +62,16 @@ app.set("view engine", "hbs");
 app.set("views", "src/views");
 
 app.use("/api/user", routerUser); 
-app.use("/api/productos", routerProducts); 
-app.use("/api/carrito", routerCart); 
-app.use("/api/registro", routerLogin); 
+app.use("/api/products", Authorized,routerProducts); 
+app.use("/api/cart", Authorized, routerCart); 
+app.use("/api/auth", routerAuth); 
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(jsonSwagger)
+);
 
-
-if (process.env.MODO == "CLUSTER" && cluster.isPrimary) {
+if (config.MODO == "CLUSTER" && cluster.isPrimary) {
   const lengthCpu = cpus.length;
   for (let index = 0; index < lengthCpu; index++) {
     cluster.fork();

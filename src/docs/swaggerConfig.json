@@ -1,0 +1,903 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Swagger ECommerce",
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8081"
+    }
+  ],
+  "security": {
+    "cookieAuth": []
+  },
+  "paths": {
+    "/api/products": {
+      "get": {
+        "summary": "List all Products",
+        "operationId": "listProducts",
+        "tags": [
+          "products"
+        ],
+        "responses": {
+          "200": {
+            "description": "Every product available",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Products"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a Product",
+        "operationId": "createProduct",
+        "tags": [
+          "products"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Create Product",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+    },
+    "/api/productos/{productId}": {
+      "get": {
+        "summary": "Info for a specific Product",
+        "operationId": "showProductById",
+        "tags": [
+          "products"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the product to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product by Id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found"
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a specific Product",
+        "operationId": "updateProductById",
+        "tags": [
+          "products"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the product to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update Product",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+
+      },
+      "delete": {
+        "summary": "Delete a specific Product",
+        "operationId": "deleteProductById",
+        "tags": [
+          "products"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the product to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete Product",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+
+      }
+    },
+    "/api/cart": {
+      "get": {
+        "summary": "List all Carts",
+        "operationId": "listCarts",
+        "tags": [
+          "carts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Every carts available",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Carts"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a Cart",
+        "operationId": "createCart",
+        "tags": [
+          "carts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Create Cart",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cart"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+    },
+    "/api/cart/{cartId}": {
+      "get": {
+        "summary": "Info for a specific Cart",
+        "operationId": "showCartById",
+        "tags": [
+          "carts"
+        ],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the cart to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cart by Id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specific Cart",
+        "operationId": "createCart",
+        "tags": [
+          "carts"
+        ],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the cart to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete Cart",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cart"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+    },
+    "/api/cart/confim/{cartId}": {
+      "post": {
+        "summary": "Confirm Cart",
+        "operationId": "confirmCart",
+        "tags": [
+          "carts"
+        ],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the cart to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Confirm Cart",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "string",
+                    "example" :"Carrito id: cartId, de: userName, confirmado. Productos: cartProducts"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+    },
+    "/api/cart/{cartId}/productsId": {
+      "post": {
+        "summary": "Add a specific product to a Cart",
+        "operationId": "addProductInCart",
+        "tags": [
+          "carts"
+        ],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the cart to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string",
+                "example": "idProduct"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Add Product",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cart"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+    },
+    "/api/cart/{cartId}/productsId/{id_prod}": {
+      "delete": {
+        "summary": "Delete a specific product in Cart",
+        "operationId": "deleteProductInCart",
+        "tags": [
+          "carts"
+        ],
+        "parameters": [
+          {
+            "name": "cartId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the cart to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id_prod",
+            "in": "path",
+            "required": true,
+            "description": "The id of the product to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete Product",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "string",
+                    "example" :"Producto con id: id_prod eliminado del carrito con id: cartId"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+    },
+    "/api/auth": {
+      "get": {
+        "summary": "Render Auth",
+        "operationId": "render Auth",
+        "tags": [
+          "auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Render login",
+            "content": {
+              "text/html": {
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Log in",
+        "operationId": "login",
+        "tags": [
+          "auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref":"#/components/schemas/Auth"
+              },
+              "example": {
+                "email": "test@test.com",
+                "password": "testtest"
+              }
+              }
+          },
+        "responses": {
+          "200": {
+            "description": "Successfully authenticated. The session ID is returned in a cookie named cookie.id. You need to include this cookie in subsequent requests",
+              "Set-Cookie":{
+                "schema": {
+                  "type": "string",
+                  "example": "cookie.id=abcde12345"
+                } 
+              }
+            }
+          },
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register":{
+      "post": {
+        "summary": "Register",
+        "operationId": "register",
+        "tags": [
+          "auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref":"#/components/schemas/NewUser"
+              },
+              "example": {
+                "email": "test@test.com",
+                "password": "testtest",
+                "name": "test",
+                "address": "test123",
+                "age": "24",
+                "cellphone": "12345678",
+                "avatar": "www.test.com" 
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+              "content":{
+                "application/json":{
+                  "schema": {
+                    "type": "string",
+                    "example": "User created"
+                  }
+                }
+            }
+          },
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "cookie.id"
+      }
+    },
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "required": [
+            "id",
+            "timestamp",
+            "name",
+            "description",
+            "code",
+            "url",
+            "price",
+            "stock"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ObjectId"
+          },
+          "timestamp": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "stock": {
+            "type": "number"
+          }
+        }
+      },
+      "ProductDTO": {
+        "type": "object",
+        "required": [
+            "name",
+            "description",
+            "code",
+            "url",
+            "price",
+            "stock"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "stock": {
+            "type": "number"
+          }
+        },
+        "example": {
+          "name": "TV",
+          "description": "Television LED",
+          "code": "TV159",
+          "url": "www.compumundo.com",
+          "price": 80000,
+          "stock": 10
+        }
+      },
+      "Products": {
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "$ref": "#/components/schemas/Product"
+        }
+      },
+      "Cart": {
+        "type": "object",
+        "required": [
+            "id",
+            "timestamp",
+            "products"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ObjectId"
+          },
+          "timestamp": {
+            "type": "string"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product"
+            }
+          }
+        }
+      },
+      "Carts": {
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "$ref": "#/components/schemas/Cart"
+        }
+      },
+      "NewUser": {
+        "type": "object",
+        "required": [
+            "email",
+            "password",
+            "name",
+            "addres",
+            "age",
+            "cellphone",
+            "avatar"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "addres": {
+            "type": "string"
+          },
+          "age": {
+            "type": "number"
+          },
+          "cellphone": {
+            "type": "number"
+          },
+          "avatar": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": [
+            "id",
+            "email",
+            "password",
+            "name",
+            "addres",
+            "age",
+            "cellphone",
+            "avatar"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ObjectId"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "addres": {
+            "type": "string"
+          },
+          "age": {
+            "type": "number"
+          },
+          "cellphone": {
+            "type": "number"
+          },
+          "avatar": {
+            "type": "string"
+          }
+        }
+      },
+      "Auth": {
+        "type": "object",
+        "required": [
+            "email",
+            "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

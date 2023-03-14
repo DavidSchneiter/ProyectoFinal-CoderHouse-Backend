@@ -1,11 +1,11 @@
 import { Request, Response} from 'express';
 import { ICart, IProduct } from "../interfaces";
 import { getTime, logger, transporter } from "../utils";
-import { ProductDao, CartDao } from "../Daos";
+import { ProductDao, CartDao } from "../Daos/Factory";
 import twilio from 'twilio';
-import 'dotenv/config'
+import config from '../utils/config';
 
-const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN)
+const client = twilio(config.ACCOUNT_SID, config.AUTH_TOKEN)
 
 export const getAll = async (req: Request, res:Response) => {
   res.status(200).json(await CartDao.getAll());
@@ -68,7 +68,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
   res.status(200).json(`Producto con id: ${req.params.id_prod} eliminado del carrito con id: ${req.params.cartId}`)
 }
 
-export const confirmProucts = async (req: Request, res: Response) => {
+export const confirmProducts = async (req: Request, res: Response) => {
   let cart: ICart = await CartDao.getById(req.params.cartId)
 
   const productsList = cart.productos.map((a) => { return `<h1>Descripcion: ${a.description}, Precio: $${a.price}</h1>` });

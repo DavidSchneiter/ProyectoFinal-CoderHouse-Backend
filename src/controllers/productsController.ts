@@ -1,4 +1,4 @@
-import { ProductDao } from "../Daos";
+import { ProductDao } from "../Daos/Factory";
 import { Request, Response} from 'express';
 import { IProduct } from "../interfaces";
 import { getTime } from "../utils";

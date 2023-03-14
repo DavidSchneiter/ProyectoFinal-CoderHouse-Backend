@@ -6,23 +6,23 @@ import { Authenticated } from '../middlewares/authenticated';
 import { fieldValidator } from '../middlewares/fieldValidator';
 
 
-export const routerLogin: Router = Router();
+export const routerAuth: Router = Router();
 
 
-routerLogin.get("/", Authenticated,(req, res) => {
+routerAuth.get("/", Authenticated,(req, res) => {
   res.render("login");
 });
 
-routerLogin.get("/", Authenticated,(req, res) => {
+routerAuth.get("/", Authenticated,(req, res) => {
   res.redirect("/api/user");
 });
 
-routerLogin.get("/register", (req, res) => {
+routerAuth.get("/register", Authenticated,(req, res) => {
   res.render("register");
 });
 
 
-routerLogin.post(
+routerAuth.post(
   "/login",
   passport.authenticate("login", { failureRedirect: "/faillogin" }),
   (req, res) => {
@@ -30,7 +30,7 @@ routerLogin.post(
   }
 );
 
-routerLogin.post("/register", [
+routerAuth.post("/register", [
   body("email", "El email es obligatorio").notEmpty().isString(),
   body("password", "La contraseña es obligatoria").isLength({
     min: 8,
@@ -45,9 +45,9 @@ routerLogin.post("/register", [
   fieldValidator
   ], loginController.register)
 
-routerLogin.get("/failregister", (req, res) => {
+routerAuth.get("/failregister", (req, res) => {
   res.send("failRegister");
 });
-routerLogin.get("/faillogin", (req, res) => {
+routerAuth.get("/faillogin", (req, res) => {
   res.send("failLogin");
 });

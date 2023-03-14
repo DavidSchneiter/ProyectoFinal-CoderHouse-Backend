@@ -1,10 +1,12 @@
 import { initializeApp, cert, ServiceAccount } from 'firebase-admin/app';
 import {getFirestore} from 'firebase-admin/firestore'
 import { logger } from '../utils';
+import config from '../utils/config';
+
 // import serviceAccount from './adminFirebase.json';
 
 initializeApp({
-  credential: cert(process.env.FIREBASE as ServiceAccount)
+  credential: cert(config.FIREBASE as ServiceAccount)
 });
 
 export const dbConnectionFirebase = async() => {

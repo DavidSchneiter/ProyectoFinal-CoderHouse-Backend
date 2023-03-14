@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import dotenv from 'dotenv';
+import config from '../utils/config';
 import { logger } from "../utils";
-dotenv.config()
+
 export const dbConnection = async () => {
   try {
-    await mongoose.connect(`${process.env.DB_CNN}`);
+    await mongoose.connect(`${config.DB_CNN}`);
     logger.info("Mongoose connection")
   } catch (error) {
       logger.error(error);
