@@ -9,7 +9,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8081"
+      "url": "https://proyectofinal-coderhouse-backend.up.railway.app/"
     }
   ],
   "security": {
