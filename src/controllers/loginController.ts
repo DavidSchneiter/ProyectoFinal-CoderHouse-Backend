@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import { User } from "../models";
-import { logger, transporter } from "../utils";
-import 'dotenv/config'
+import { logger, transporter, config } from "../utils";
 
+/** 
+ * @body string email
+ * @body string password
+ * @return  message: "User created."
+ */
 export const register = async(req: Request, res: Response) => {
   if (!req.body.email || !req.body.password) {
     return res.status(400).json({ message: "Please enter your email and password." });
@@ -16,7 +20,7 @@ export const register = async(req: Request, res: Response) => {
 
   const email = {
     from: 'Servidor eCommerce',
-    to: process.env.MAIL,
+    to: config.MAIL,
     subject: 'Mail de nuevo registro',
     html: `<h1 style="color: blue"><span>Nombre: </span> ${req.body.name}</h1> <h1 style="color: red"><span>Email: </span>${req.body.email}</h1> <h1 style="color: green"><span>Dirección: </span>${req.body.address}</h1> <h1 style="color: brown"><span>Edad: </span>${req.body.age}</h1> <h1 style="color: purple"><span>Celular: </span>${req.body.cellphone}</h1>`
   };

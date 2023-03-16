@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import config from '../utils/config';
-import { logger } from "../utils";
+import { logger, config } from "../utils";
 
 export const dbConnection = async () => {
   try {

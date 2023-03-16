@@ -38,13 +38,10 @@ const ProductSchema:Schema = new Schema({
     }
 });
 
-ProductSchema.set("toJSON", {
-    transform: (_, response) => {
-        response.id = response._id;
-        delete response._id;
-        delete response.__v
-        return response;
-    }
+ProductSchema.method("toJSON", function () {
+  const { __v, _id, ...object } = this.toObject();
+  object.id = _id;
+  return object;
 })
 
 export const Product = model<IProduct>("Product", ProductSchema)

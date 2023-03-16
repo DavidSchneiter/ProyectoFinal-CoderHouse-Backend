@@ -3,24 +3,34 @@ import { ICart, IProduct } from "../interfaces";
 import { getTime, logger, transporter } from "../utils";
 import { ProductDao, CartDao } from "../Daos/Factory";
 import twilio from 'twilio';
-import config from '../utils/config';
+import { config } from '../utils';
 
 const client = twilio(config.ACCOUNT_SID, config.AUTH_TOKEN)
-
+/** 
+ * @return  Cart[]  
+ */
 export const getAll = async (req: Request, res:Response) => {
   res.status(200).json(await CartDao.getAll());
 };
-
+/** 
+ * @param string $cartId
+ * @return Cart  
+ */
 export const getById = async (req: Request, res: Response) => {
   const productosCart = await CartDao.getById(req.params.id);
   res.status(200).json(productosCart);
 };
-
+/** 
+ * @return Cart  
+ */
 export const createCart = async (req: Request, res: Response) => {
-  const cart:ICart = { timestamp: getTime(), productos: [] };
+  const cart:ICart = { timestamp: getTime() };
   res.status(200).json(await CartDao.save(cart));
 }
-
+/** 
+ * @param string $cartId
+ * @return Cart  
+ */
 export const deleteById = async (req: Request, res: Response) => {
   const product = await CartDao.getById(req.params.id);
   if (!product) {
@@ -29,7 +39,11 @@ export const deleteById = async (req: Request, res: Response) => {
   const resp = await CartDao.deleteById(req.params.id);
   res.status(200).json(resp);
 }
-
+/** 
+ * @body string $productId
+ * @param string $cartId
+ * @return Cart  
+ */
 export const addProduct = async (req: Request, res: Response) => {
   const { productsId } = req.body;
   let cart:ICart = await CartDao.getById(req.params.cartId)
@@ -40,39 +54,38 @@ export const addProduct = async (req: Request, res: Response) => {
   if (!product) {
     return res.status(404).json({ error: "Producto no encontrado" });
   }
-  cart.productos.push(product)
   
+  await CartDao.addOneRelated(req.params.cartId, productsId)
+  
+  cart = await CartDao.getById(req.params.cartId)
   // Para el FileSystem se necesita esta linea
   // await CartDao.deleteById(req.params.cartId);
-  
-  await CartDao.save(cart)
-  res.status(200).json({
+  res.status(200).json(
       cart
-  });
+  );
 };
-
+/** 
+ * @param string $productId
+ * @param string $cartId
+ * @return `Producto con id: {}, eliminado del carrito con id: {}`
+ */
 export const deleteProduct = async (req: Request, res: Response) => {
   let cart: ICart = await CartDao.getById(req.params.cartId)
   if (!cart) {
     return res.status(404).json({ error: "Cart no encontrado" })
   }
-  const newCart = await CartDao.deleteProdById(req.params.id_prod, cart.productos)
-  // console.log(typeof newCart)
-  // cart = {
-  //   ...cart,
-  //   productos: newCart
-  // }
-  // await CartDao.deleteById(req.params.cartId)
-  // await CartDao.save(cart);
-  // console.log(newCart)
-  res.status(200).json(`Producto con id: ${req.params.id_prod} eliminado del carrito con id: ${req.params.cartId}`)
+  await CartDao.deleteOneRelated(req.params.cartId, req.params.id_prod)
+  res.status(200).json(`Producto con id: ${req.params.id_prod}, eliminado del carrito con id: ${req.params.cartId}`)
 }
-
+/** 
+ * @param string $cartId
+ * @return `Carrito id: {}, de {}, confirmado. Productos: {}`
+ */
 export const confirmProducts = async (req: Request, res: Response) => {
   let cart: ICart = await CartDao.getById(req.params.cartId)
 
-  const productsList = cart.productos.map((a) => { return `<h1>Descripcion: ${a.description}, Precio: $${a.price}</h1>` });
-  const productsTotal = cart.productos.map((a) => { return a.price }).reduce((a, b) => { return a + b });
+  const productsList = cart.productos?.map((a) => { return `<h1>Descripcion: ${a.description}, Precio: $${a.price}</h1>` });
+  const productsTotal = cart.productos?.map((a) => { return a.price }).reduce((a, b) => { return a + b });
 
   const email = {
     from: 'Servidor eCommerce',
@@ -89,7 +102,7 @@ export const confirmProducts = async (req: Request, res: Response) => {
       .then(message => console.log(message.sid));
     
      client.messages.create({
-      body: `Lista de productos en su carrito: \n ${cart.productos.map((a) => { return `Descripcion: ${a.description}, Precio: $${a.price}\n`})} Total: $${productsTotal}`,
+      body: `Lista de productos en su carrito: \n ${cart.productos?.map((a) => { return `Descripcion: ${a.description}, Precio: $${a.price}\n`})} Total: $${productsTotal}`,
       from: process.env.WPP_TWILIO,
       to: `whatsapp:+549${JSON.stringify(req.user?.cellphone)}`
      })

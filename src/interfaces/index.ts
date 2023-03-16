@@ -1,5 +1,6 @@
 export interface IProduct{
     id?: number;
+    _id?: number;
     timestamp: string;
     name: string;
     description: string;
@@ -12,7 +13,7 @@ export interface IProduct{
 export interface ICart {
   id?: number;
   timestamp: string;
-  productos: Array<IProduct>;
+  productos?: Array<IProduct>;
 }
 
 export interface IUser {

@@ -8,19 +8,16 @@ const CartSchema:Schema = new Schema({
         require: true,
         max:100
     },
-    productos: [{
+    products_id: [{
         type: Schema.Types.ObjectId,
         ref: "Product",
     }]
 })
 
-CartSchema.set("toJSON", {
-    transform: (_, response) => {
-        response.id = response._id;
-        delete response._id;
-        delete response.__v
-        return response;
-    }
+CartSchema.method("toJSON", function () {
+  const { __v, _id, ...object } = this.toObject();
+  object.id = _id;
+  return object;
 })
 
 export const Cart = model<ICart>("Cart", CartSchema)

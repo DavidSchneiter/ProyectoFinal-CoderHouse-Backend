@@ -1,17 +1,19 @@
 import { CartContenedor, Contenedor } from "../Containers/ClassArchivo"; 
-import {CartFB, CartMongo} from './Carts'
-import { ProductMongo, ProductFB } from './Products'
-import config from '../utils/config';
+import {CartFB, CartMongo, CartKnex} from './Carts'
+import { ProductMongo, ProductFB, ProductKnex} from './Products'
+import { config, logger } from '../utils';
+import { createTables } from '../database/sqliteTable';
 
-const DATABASE = config.DATABASE || 'mongo'
+const DATABASE = config.DATABASE
+logger.info(`Database: ${config.DATABASE}`)
 
-const getSelectedDatabase = ():any => {
+const getSelectedDatabase = (): any => {
     switch (DATABASE) {
         case "mongo":{
             return {
                 ProductDao: new ProductMongo(),
                 CartDao: new CartMongo()
-            }
+            } 
         }
         case "firebase":{
             return {
@@ -23,7 +25,12 @@ const getSelectedDatabase = ():any => {
                 ProductDao: new Contenedor("productos"),
                 CartDao: new CartContenedor("carrito")
             }}
+        case "sql":{
+            createTables()
+            return {
+                ProductDao: new ProductKnex(),
+                CartDao: new CartKnex()
+            }}
     }
 }
-
 export const { ProductDao, CartDao } = getSelectedDatabase()

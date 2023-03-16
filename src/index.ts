@@ -10,24 +10,16 @@ import swaggerUi from "swagger-ui-express";
 
 import { routerCart, routerProducts, routerUser, routerAuth} from './router'
 import { dbConnection } from './database/configMongo';
-import { logger } from './utils';
+import { config, logger } from './utils';
 import jsonSwagger from './docs/swaggerConfig.json'
-import config from './utils/config';
-import { Authorized } from './middlewares/authorized';
-
-Mongoose.set("strictQuery", true);
-const advancedOptions = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
+import { Authorized } from './middlewares';
 
 const app: Express = express();
 
 const PORT = config.PORT || 8080;
-console.log(PORT)
 
 
-
+Mongoose.set("strictQuery", true);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -62,7 +54,7 @@ app.set("view engine", "hbs");
 app.set("views", "src/views");
 
 app.use("/api/user", routerUser); 
-app.use("/api/products", Authorized,routerProducts); 
+app.use("/api/products", Authorized, routerProducts); 
 app.use("/api/cart", Authorized, routerCart); 
 app.use("/api/auth", routerAuth); 
 app.use(
@@ -79,7 +71,9 @@ if (config.MODO == "CLUSTER" && cluster.isPrimary) {
 } else {
   const server = app.listen(PORT, async () => {
     logger.info(`Servidor de exprees ejecutandose en el puerto ${PORT}`);
-    dbConnection()
+    if (config.DATABASE == "mongo") {
+      dbConnection()
+    }
   });
 
   server.on("error", (error) => logger.error(`Erorr en el servidor ${error}`));

@@ -19,7 +19,7 @@ export class Contenedor {
       this.id++;
       obj.id = this.id;
     }
-
+    obj.timestamp = getTime()
     this.contain.push(obj);
     //muchos problemas con esos 2 objetos y el id asi que les puse any
     this.contain.sort((a:any, b:any) => {
@@ -116,7 +116,7 @@ export class CartContenedor {
       this.id++;
       obj.id = this.id;
     }
-
+    obj.timestamp = getTime()
     this.contain.push(obj);
     //muchos problemas con esos 2 objetos y el id asi que les puse any
     this.contain.sort((a: any, b: any) => {
@@ -135,9 +135,9 @@ export class CartContenedor {
   async getById(id: string): Promise<ICart> {
     try {
       const data = await fs.promises.readFile(`./src/db/${this.file}.txt`, "utf-8");
-      return JSON.parse(data).filter((e: ICart) => {
+      return JSON.parse(data).find((e: ICart) => {
         return e.id == parseInt(id);
-      })[0];
+      });
     } catch (error) {
       throw new Error(`Imposible leer archivo ${error}`);
     }
@@ -151,12 +151,13 @@ export class CartContenedor {
       throw new Error(`Imposible leer archivo ${error}`);
     }
   }
-  async deleteProdById(id: string, cart: any): Promise<Array<ICart>> {
+  async deleteOneRelated(idCart: string, idProd: any): Promise<ICart> {
     try {
-      const newData = cart.filter((e: ICart) => {
-        return e.id !== parseInt(id);
+      const cart:ICart = await this.getById(idCart)
+      cart.productos?.filter((e: ICart) => {
+        return e.id !== parseInt(idProd);
       })
-      return newData
+      return cart
     } catch (error) {
       throw new Error(`Imposible leer archivo ${error}`);
     }

@@ -7,14 +7,14 @@ export class MongoDBContainer {
     this.model = model;
 
   }
-
+  
   async getAll(): Promise<any>{
       return await this.model.find()
   }
   
-  async save(obj:object): Promise<any> {
-      await this.model.create(obj)
-
+  async save(obj: object): Promise<any> {
+      const entity = new this.model(obj)
+      return await entity.save()
     }
     
   async getById(id: ObjectId): Promise<any>{

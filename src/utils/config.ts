@@ -80,6 +80,4 @@ const getSanitzedConfig = (config: ENV): Config => {
 
 const config = getConfig();
 
-const sanitizedConfig = getSanitzedConfig(config);
-
-export default sanitizedConfig;
+export const sanitizedConfig = getSanitzedConfig(config);

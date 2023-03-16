@@ -12,4 +12,10 @@ export class CartMongo extends MongoDBContainer {
         return await this.model.findById(id).populate({path: 'productos'})
         
     }
+    async addOneRelated(idCollection: ObjectId, idRelated: ObjectId): Promise<any>{
+     return await this.model.updateOne({id: idCollection},{$push: {productos: idRelated}})
+    }
+    async deleteOneRelated(idCollection: ObjectId, idRelated: ObjectId): Promise<any>{
+     return await this.model.updateOne({id: idCollection},{$pull: {productos: idRelated}})
+    }
 }

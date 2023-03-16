@@ -1,6 +1,5 @@
 import { createTransport } from 'nodemailer';
-import config from './config';
-
+import { sanitizedConfig as config } from "./config"
 export const transporter = createTransport({
     host: 'smtp.gmail.com',
     port: 587,
