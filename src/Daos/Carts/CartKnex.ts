@@ -12,8 +12,8 @@ export class CartKnex extends KnexContainer<ICart>{
                 .select('*');
 
     }
-    async addOneRelated(idCollection: string, idRelated: string): Promise<any>{
-        // await this.db(`${this.tableName}`).where('id', idCollection).insert({ productos: idRelated });
+    async addOneRelated(idCollection: string, idRelated: string): Promise<any> {
+        await this.db(`${this.tableName}`).where('id', idCollection).insert({ productos: idRelated });
         // const carrito = await this.db(`${this.tableName}`).where('id', idCollection).first();
         // await this.db(`${this.tableName}`).where('id', idCollection).update({ productos: carrito.productos});
         

@@ -1,0 +1,1 @@
+export { MensajesMongo } from './MensajeMongo';

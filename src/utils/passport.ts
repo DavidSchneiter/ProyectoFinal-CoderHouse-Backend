@@ -5,7 +5,6 @@ import { IUser } from '../interfaces/index';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { logger } from './logger';
-const swaggerDocument = require( '../docs/swaggerConfig.json')
 
 const validatePassword = (user:IUser, password:string) => {
   return bcrypt.compareSync(password, user.password);

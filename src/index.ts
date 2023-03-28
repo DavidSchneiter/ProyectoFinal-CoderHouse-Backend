@@ -7,14 +7,20 @@ import Mongoose from 'mongoose';
 import { cpus } from 'os'
 import cluster from 'cluster'
 import swaggerUi from "swagger-ui-express";
+import { Server as HttpServer } from 'http';
+import { Server as IOServer } from 'socket.io';
 
-import { routerCart, routerProducts, routerUser, routerAuth} from './router'
+import { routerCart, routerProducts, routerUser, routerAuth, routerChat} from './router'
 import { dbConnection } from './database/configMongo';
 import { config, logger } from './utils';
 import jsonSwagger from './docs/swaggerConfig.json'
 import { Authorized } from './middlewares';
+import { startSocket } from './sockets';
 
 const app: Express = express();
+const httpServer = new HttpServer(app);
+const io = new IOServer(httpServer);
+startSocket(io);
 
 const PORT = config.PORT || 8080;
 
@@ -54,14 +60,16 @@ app.set("view engine", "hbs");
 app.set("views", "src/views");
 
 app.use("/api/user", routerUser); 
-app.use("/api/products", Authorized, routerProducts); 
-app.use("/api/cart", Authorized, routerCart); 
+app.use("/api/products",Authorized,  routerProducts); 
+app.use("/api/cart",Authorized,  routerCart); 
 app.use("/api/auth", routerAuth); 
+app.use("/api/chat",Authorized, routerChat);
 app.use(
   "/docs",
   swaggerUi.serve,
   swaggerUi.setup(jsonSwagger)
 );
+
 
 if (config.MODO == "CLUSTER" && cluster.isPrimary) {
   const lengthCpu = cpus.length;
@@ -69,7 +77,7 @@ if (config.MODO == "CLUSTER" && cluster.isPrimary) {
     cluster.fork();
   }
 } else {
-  const server = app.listen(PORT, async () => {
+  const server = httpServer.listen(PORT, async () => {
     logger.info(`Servidor de exprees ejecutandose en el puerto ${PORT}`);
     if (config.DATABASE == "mongo") {
       dbConnection()

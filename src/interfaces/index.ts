@@ -26,3 +26,10 @@ export interface IUser {
   cellphone: number;
   avatar: string;
 }
+
+export interface IMensaje {
+  id?: number;
+  user: string | undefined;
+  timestamp: string;
+  text: string;
+}

@@ -1,0 +1,44 @@
+<style>
+    form{background: rgba(0,0,0,.15); padding: 0.25ren; position: fixed; bottom: 0; left: 0; right: 0; display:flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px);}
+    ul{list-style-type: none; margin: 0; padding: 0;}
+    ul > li {padding: 0.5rem 1rem;}
+    h3{ color: blueviolet;}
+</style>
+<p id="username">{{username}}</p>
+<ul class="list-group"></ul>
+<form action="">
+    <input type="text" class="form-control" placeholder="Ingrese mensaje">
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
+<div id="chatContainer"></div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    let socket = io();
+    const chatContainer = document.getElementById("chatContainer");
+    const form = document.querySelector('form')
+    const input = document.querySelector('input')
+    let mensajes = document.querySelector('ul')
+
+    form.addEventListener('submit', (e)=> {
+        e.preventDefault()
+        if(input.value) {
+            mensaje = { 
+                text: input.value,
+                user: `{{username}}`
+            }
+            socket.emit('new message', mensaje)
+            input.value = ''
+        }
+    })
+
+    socket.on('all message', (msg)=> {
+         mensajesRenderizados(msg);
+    })
+    const mensajesRenderizados = async (messages) => {
+        const res = await fetch("./chat/temple");            
+        const template = await res.text();
+        const compiledTemplate = Handlebars.compile(template, {messages: messages});
+        const html = compiledTemplate({ messages });
+        chatContainer.innerHTML = html;
+    };
+</script>

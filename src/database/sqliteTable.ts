@@ -20,7 +20,7 @@ export const createTables = () => {
     });
     db.schema.createTableIfNotExists('cart', function(table) {
         table.increments('id').primary();
-        table.specificType('productos', 'INTEGER[]').unsigned().references('id').inTable('products');
+        table.string('productos').unsigned().references('id').inTable('products');
         table.string("timestamp")
     })
     .then(function() {

@@ -3,6 +3,7 @@ import {CartFB, CartMongo, CartKnex} from './Carts'
 import { ProductMongo, ProductFB, ProductKnex} from './Products'
 import { config, logger } from '../utils';
 import { createTables } from '../database/sqliteTable';
+import { MensajesMongo } from "./Mensaje";
 
 const DATABASE = config.DATABASE
 logger.info(`Database: ${config.DATABASE}`)
@@ -12,7 +13,8 @@ const getSelectedDatabase = (): any => {
         case "mongo":{
             return {
                 ProductDao: new ProductMongo(),
-                CartDao: new CartMongo()
+                CartDao: new CartMongo(),
+                MensajeDao: new MensajesMongo()
             } 
         }
         case "firebase":{
@@ -33,4 +35,4 @@ const getSelectedDatabase = (): any => {
             }}
     }
 }
-export const { ProductDao, CartDao } = getSelectedDatabase()
+export const { ProductDao, CartDao, MensajeDao } = getSelectedDatabase()
