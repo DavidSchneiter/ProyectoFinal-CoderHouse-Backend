@@ -5,6 +5,8 @@ if (process.env.NODE_ENV === "production") {
     dotenv.config({ path: path.resolve(__dirname, "../../.env.production") });
 } else if (process.env.NODE_ENV === "development") {
     dotenv.config({ path: path.resolve(__dirname, "../../.env.development") });
+} else {
+  dotenv.config();
 }
 
 // Interface to load env variables
@@ -12,17 +14,17 @@ if (process.env.NODE_ENV === "production") {
 // as someone could skip these varibales or not setup a .env file at all
 
 interface ENV {
-    NODE_ENV: string | undefined;
-    PORT: number | undefined;
-    DB_CNN: string | undefined;
-    DATABASE: string | undefined;
-    SECRET_KEY: string | undefined;
-    MAIL: string | undefined;
-    MAIL_PASSWORD: string | undefined;
-    ACCOUNT_SID: string | undefined;
-    AUTH_TOKEN: string | undefined;
-    WPP_TWILIO: string | undefined;
-    WPP_ADMINISTRADOR: string | undefined;
+  NODE_ENV: string | undefined;
+  PORT: number | undefined;
+  DB_CNN: string | undefined;
+  DATABASE: string | undefined;
+  SECRET_KEY: string | undefined;
+  MAIL: string | undefined;
+  MAIL_PASSWORD: string | undefined;
+  ACCOUNT_SID: string | undefined;
+  AUTH_TOKEN: string | undefined;
+  WPP_TWILIO: string | undefined;
+  WPP_ADMINISTRADOR: string | undefined;
   MODO: string | undefined;
   FIREBASE: string | undefined;
 }
