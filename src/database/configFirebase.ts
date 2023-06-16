@@ -7,7 +7,7 @@ initializeApp({
   credential: cert(config.FIREBASE as ServiceAccount)
 });
 
-export const dbConnectionFirebase = async() => {
+const dbConnectionFirebase = async() => {
  try {
    const db = getFirestore()
    logger.info('Firestore connection')
@@ -17,3 +17,5 @@ export const dbConnectionFirebase = async() => {
    throw new Error("Firestore connection error: " + error)
  }
 }
+
+export default dbConnectionFirebase
